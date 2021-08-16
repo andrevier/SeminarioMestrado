@@ -74,7 +74,7 @@ FLrd_0 = FLr_dq_0
 [Isd_0, Isq_0] = pol2cart(thetaIs-thetar,Is_0);
 
 
-%Cálculo dos controles
+%Cálculo dos parâmetros do PI para o loop de velocidade.
 Wc = 25                     % rad/s frequência de crossover.
 k = (p/2)*(Lm^2/Lr)*Isd_0     % constante do torque.
 MF = 60*pi/180;             % margem de fase em rad.
@@ -86,3 +86,5 @@ Kp = Ki*tan(MF)/Wc
 GL = (Kp + Ki/(j*Wc))*k/(J*j*Wc)
 GLabs = abs(GL)
 GLang = angle(GL)*180/pi
+
+%
