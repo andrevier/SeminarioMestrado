@@ -76,7 +76,8 @@ FLrd_0 = FLr_dq_0
 [Isd_0, Isq_0] = pol2cart(thetaIs-thetar,Is_0);
 [Vsd_0, Vsq_0] = pol2cart(theta_Vs_dq - thetar, Vs_dq_0);
 
-%Cálculo dos parâmetros do PI para o loop de velocidade.
+disp('controle de velocidade')
+% Cálculo dos parâmetros do PI para o malha de controle de velocidade.
 Wc = 25                       % rad/s frequência de crossover.
 k = (p/2)*(Lm^2/Lr)*Isd_0     % constante do torque.
 MF = 60*pi/180;               % margem de fase em rad.
@@ -89,19 +90,24 @@ GL = (Kp + Ki/(j*Wc))*k/(J*j*Wc)
 GLabs = abs(GL)
 GLang = angle(GL)*180/pi
 
-%Cálculo dos parâmetros do PI para o loop de corrente antes do SVPWM.
+disp('controle de tensão')
+% Cálculo dos parâmetros do PI para a malha de tensão.
 sigma = 1 - Lm^2/(Lr*Ls);
-Wci = 10*Wc
-MFi = 60*pi/180;
-tanMF = tan(MFi - pi);      % Fórmula da margem de fase
+Wcii = 10*Wc
+MFii = 60*pi/180;
+tanMFii = tan(MFii - pi);      % Fórmula da margem de fase
 
-Kii = Wci*(Wci*sigma*Ls + Rs*tanMF)/sqrt(tanMF^2 + 1)
-Kpi = (Kii/Wci)*(Wci*sigma*Ls*tanMF - Rs)/(Wci*sigma*Ls + Rs*tanMF)
+Kiii = Wcii*(Wcii*sigma*Ls + Rs*tanMFii)/sqrt(tanMFii^2 + 1)
+Kpii = (Kiii/Wcii)*(Wcii*sigma*Ls*tanMFii - Rs)/(Wcii*sigma*Ls + Rs*tanMFii)
 
 % Conferir a função de transferência:
-GL_i = (Kpi + Kii/(j*Wci))/(Rs + (j*Wci)*sigma*Ls)
-GLabs_i = abs(GL_i)
-GLang_i = angle(GL_i)*180/pi
+GL_ii = (Kpii + Kiii/(j*Wcii))/(Rs + (j*Wcii)*sigma*Ls)
+GLabs_ii = abs(GL_ii)
+GLang_ii = angle(GL_ii)*180/pi
+
+disp('controle do fluxo enlaçado pelo rotor')
+Kif = Ki   % mesmos valores do controle de velocidade.
+Kpf = Kp
 
 tempo = 4.5;
 % Executar a simulação
